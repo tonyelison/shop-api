@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 const app = express();
 
@@ -17,9 +18,9 @@ app.post('/api/login', (req, res) => {
     email: 'test@email.com',
   };
 
-  jwt.sign({ user }, 'secretkey', (err, token) => {
+  jwt.sign({ user }, process.env.SECRET_KEY, (err, token) => {
     res.json({ token });
   });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
