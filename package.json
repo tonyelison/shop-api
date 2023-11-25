@@ -1,6 +1,7 @@
 {
   "name": "shop-api",
   "version": "1.0.0",
+  "type": "module",
   "description": "Shop API",
   "main": "app.js",
   "scripts": {
