@@ -1,11 +1,11 @@
 import express, { urlencoded } from 'express';
 import { mongoose } from 'mongoose';
 import session from 'express-session';
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcryptjs';
+import passport from './config/passport.js';
+import authentication from './config/authentication.js';
+import User from './models/user.js';
 import 'dotenv/config';
-import User from './models/user';
 
 // Connect to Mongo DB
 mongoose.connect(process.env.DB_URL);
@@ -16,64 +16,10 @@ db.on('error', console.error.bind(console, 'mongo connection error'));
 const app = express();
 
 app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
-
-// passport.authenticate()
-passport.use(
-  new LocalStrategy(
-    { usernameField: 'username', passReqToCallback: true },
-    async (req, username, password, done) => {
-      try {
-        const user = await User.findOne({ username });
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username' });
-        }
-
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-          return done(null, false, { message: 'Incorrect password' });
-        }
-
-        return done(null, user);
-      } catch (err) {
-        return done(err);
-      }
-    },
-  ),
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(authentication.verify());
 app.use(urlencoded({ extended: false }));
-
-const checkAuthentication = (publicRoutes = []) => (req, res, next) => {
-  if (req.isAuthenticated() || publicRoutes.includes(req.path)) {
-    next();
-    return;
-  }
-  res.sendStatus(403);
-};
-
-// Declare Public Endpoints
-app.use(checkAuthentication([
-  '/api/hello',
-  '/api/signup',
-  '/api/login',
-  '/api/logout',
-  '/api/login-failure',
-]));
 
 // Add Global 'currentUser'
 app.use((req, res, next) => {
