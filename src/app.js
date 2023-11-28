@@ -2,31 +2,42 @@ import express, { urlencoded } from 'express';
 import { mongoose } from 'mongoose';
 import session from 'express-session';
 import bcrypt from 'bcryptjs';
+import cors from 'cors';
+
 import passport from './config/passport.js';
 import authentication from './config/authentication.js';
 import User from './models/user.js';
 import 'dotenv/config';
 
-// Connect to Mongo DB
+// Connect to mongodb
 mongoose.connect(process.env.DB_URL);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
-// Create Express Application
+// Create express application
 const app = express();
 
+// Initialize session
 app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
+
+// Initialize user authentication
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(authentication.verify());
+
+// Enable url encoding
 app.use(urlencoded({ extended: false }));
 
-// Add Global 'currentUser'
+// Enable CORS
+app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+
+// Add global 'currentUser'
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
 
+// Declare rest endpoints
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello, World!' });
 });
