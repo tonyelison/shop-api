@@ -1,19 +1,12 @@
 import express, { urlencoded } from "express";
 import path from "path";
-import { mongoose, Schema } from 'mongoose';
+import { mongoose } from 'mongoose';
 import session from "express-session";
 import passport from 'passport';
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import 'dotenv/config';
-
-const User = mongoose.model(
-  "User",
-  new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true }
-  })
-);
+import User from './models/user.js';
 
 // Connect to Mongo DB
 mongoose.connect(process.env.DB_URL);
