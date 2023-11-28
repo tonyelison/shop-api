@@ -1,14 +1,11 @@
 import express, { urlencoded } from "express";
 import path from "path";
-import mongoose from 'mongoose';
+import { mongoose, Schema } from 'mongoose';
 import session from "express-session";
 import passport from 'passport';
-import passportLocal from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import 'dotenv/config';
-
-const LocalStrategy = passportLocal.Strategy;
-const Schema = mongoose.Schema;
 
 const User = mongoose.model(
   "User",
