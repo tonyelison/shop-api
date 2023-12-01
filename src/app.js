@@ -72,7 +72,7 @@ app.post('/api/signup', async (req, res, next) => {
         password: passwordHash,
       });
       await user.save();
-      return res.send(`successfully added the following user: ${user.username}`);
+      return res.json({ 'user-id': user._id });
     } catch (e) {
       return next(e);
     }
@@ -99,7 +99,7 @@ app.post('/api/logout', (req, res, next) => {
     if (err) {
       return next(err);
     }
-    return res.send('successfully logged out');
+    return res.json({ message: 'successfully logged out' });
   });
 });
 
