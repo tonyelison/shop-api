@@ -3,6 +3,7 @@ import { mongoose } from 'mongoose';
 import session from 'express-session';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
+import logger from 'morgan';
 
 import passport from './config/passport.js';
 import authentication from './config/authentication.js';
@@ -16,6 +17,9 @@ db.on('error', console.error.bind(console, 'mongo connection error'));
 
 // Create express application
 const app = express();
+
+// Enable logger
+app.use(logger('dev'));
 
 // Initialize session
 app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
@@ -46,8 +50,12 @@ app.get('/api/authenticated', (req, res) => {
   res.json({ message: 'User is authenticated!' });
 });
 
+app.get('/api/session', (req, res) => {
+  res.json({ message: 'session object goes here' });
+});
+
 app.get('/api/login-failure', (req, res) => {
-  res.json({ message: 'Failed to log in!' });
+  res.status(500).json({ error: 'Failed to log in!' });
 });
 
 app.post('/api/signup', async (req, res, next) => {
@@ -70,10 +78,17 @@ app.post('/api/signup', async (req, res, next) => {
 
 app.post(
   '/api/login',
-  passport.authenticate('local', {
-    successRedirect: '/api/authenticated',
-    failureRedirect: '/api/login-failure',
-  }),
+  (req, res, next) => {
+    passport.authenticate('local', (error, user, info) => {
+      if (error) { return res.status(401).send(error); }
+      if (!user) { return res.status(401).send(info); }
+
+      return req.logIn(user, (err) => {
+        if (err) { return next(err); }
+        return res.send(user);
+      });
+    })(req, res, next);
+  },
 );
 
 app.post('/api/logout', (req, res, next) => {
