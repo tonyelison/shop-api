@@ -13,5 +13,6 @@ module.exports = {
   },
   rules: {
     'import/extensions': ['error', 'ignorePackages'],
+    'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
 };

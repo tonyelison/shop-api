@@ -21,10 +21,10 @@ const app = express();
 // Enable logger
 app.use(logger('dev'));
 
-// Initialize session
+// Enable express sessions
 app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
 
-// Initialize user authentication
+// Add user authentication
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(authentication.verify());
@@ -34,6 +34,9 @@ app.use(urlencoded({ extended: false }));
 
 // Enable CORS
 app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+
+// Enable JSON parsing
+app.use(express.json());
 
 // Add global 'currentUser'
 app.use((req, res, next) => {
@@ -85,7 +88,7 @@ app.post(
 
       return req.logIn(user, (err) => {
         if (err) { return next(err); }
-        return res.send(user);
+        return res.json({ 'user-id': user._id });
       });
     })(req, res, next);
   },
