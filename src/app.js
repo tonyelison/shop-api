@@ -22,7 +22,13 @@ const app = express();
 app.use(logger('dev'));
 
 // Enable express sessions
-app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: true }));
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 
 // Add user authentication
 app.use(passport.initialize());
@@ -79,20 +85,23 @@ app.post('/api/signup', async (req, res, next) => {
   });
 });
 
-app.post(
-  '/api/login',
-  (req, res, next) => {
-    passport.authenticate('local', (error, user, info) => {
-      if (error) { return res.status(401).send(error); }
-      if (!user) { return res.status(401).send(info); }
+app.post('/api/login', (req, res, next) => {
+  passport.authenticate('local', (error, user, info) => {
+    if (error) {
+      return res.status(401).send(error);
+    }
+    if (!user) {
+      return res.status(401).send(info);
+    }
 
-      return req.logIn(user, (err) => {
-        if (err) { return next(err); }
-        return res.json({ 'user-id': user._id });
-      });
-    })(req, res, next);
-  },
-);
+    return req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({ 'user-id': user._id });
+    });
+  })(req, res, next);
+});
 
 app.post('/api/logout', (req, res, next) => {
   req.logout((err) => {
@@ -103,4 +112,6 @@ app.post('/api/logout', (req, res, next) => {
   });
 });
 
-app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
+app.listen(process.env.PORT, () =>
+  console.log(`Server running on port ${process.env.PORT}`),
+);
