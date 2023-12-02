@@ -61,6 +61,10 @@ app.get(`${API_PATH}/hello`, (req, res) => {
   res.json({ message: 'Hello, World!' });
 });
 
+app.get(`${API_PATH}/hello-auth`, (req, res) => {
+  res.json({ message: 'Hello, Authenticated User!' });
+});
+
 app.use(`${API_PATH}/users`, usersRouter);
 app.use(`${API_PATH}/session`, sessionRouter);
 

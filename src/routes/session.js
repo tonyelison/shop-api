@@ -4,7 +4,7 @@ import passport from 'passport';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.json({ message: 'session object goes here' });
+  res.json({ ...req.session.passport });
 });
 
 router.post('/', (req, res, next) => {
@@ -20,7 +20,7 @@ router.post('/', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      return res.json({ 'user-id': user._id });
+      return res.redirect(303, req.baseUrl);
     });
   })(req, res, next);
 });
