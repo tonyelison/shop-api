@@ -1,9 +1,4 @@
-const publicEndpoints = [
-  '/api/hello',
-  '/api/signup',
-  '/api/login',
-  '/api/login-failure',
-];
+const publicEndpoints = ['/api/hello', '/api/users', '/api/session'];
 
 const checkAuthentication =
   (allowedUrls = []) =>

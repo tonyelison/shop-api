@@ -50,20 +50,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// Declare rest endpoints
+/*
+REST endpoints
+*/
+
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello, World!' });
-});
-
-app.get('/api/authenticated', (req, res) => {
-  res.json({ message: 'User is authenticated!' });
 });
 
 app.get('/api/session', (req, res) => {
   res.json({ message: 'session object goes here' });
 });
 
-app.post('/api/signup', async (req, res, next) => {
+app.post('/api/users', async (req, res, next) => {
   bcrypt.hash(req.body.password, 10, async (err, passwordHash) => {
     if (err) {
       return next(err);
@@ -81,7 +80,7 @@ app.post('/api/signup', async (req, res, next) => {
   });
 });
 
-app.post('/api/login', (req, res, next) => {
+app.post('/api/session', (req, res, next) => {
   passport.authenticate('local', (error, user, info) => {
     if (error) {
       return res.status(401).send(error);
@@ -99,7 +98,7 @@ app.post('/api/login', (req, res, next) => {
   })(req, res, next);
 });
 
-app.post('/api/logout', (req, res, next) => {
+app.delete('/api/session', (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
