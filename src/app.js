@@ -63,10 +63,6 @@ app.get('/api/session', (req, res) => {
   res.json({ message: 'session object goes here' });
 });
 
-app.get('/api/login-failure', (req, res) => {
-  res.status(500).json({ error: 'Failed to log in!' });
-});
-
 app.post('/api/signup', async (req, res, next) => {
   bcrypt.hash(req.body.password, 10, async (err, passwordHash) => {
     if (err) {
