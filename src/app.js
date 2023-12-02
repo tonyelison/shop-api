@@ -1,14 +1,15 @@
 import express, { urlencoded } from 'express';
 import { mongoose } from 'mongoose';
 import session from 'express-session';
-import bcrypt from 'bcryptjs';
 import cors from 'cors';
 import logger from 'morgan';
 
 import passport from './config/passport.js';
 import authentication from './config/authentication.js';
-import User from './models/user.js';
 import 'dotenv/config';
+
+import sessionRouter from './routes/session.js';
+import usersRouter from './routes/users.js';
 
 // Connect to mongodb
 mongoose.connect(process.env.DB_URL);
@@ -54,58 +55,14 @@ app.use((req, res, next) => {
 REST endpoints
 */
 
-app.get('/api/hello', (req, res) => {
+const { API_PATH } = process.env;
+
+app.get(`${API_PATH}/hello`, (req, res) => {
   res.json({ message: 'Hello, World!' });
 });
 
-app.get('/api/session', (req, res) => {
-  res.json({ message: 'session object goes here' });
-});
-
-app.post('/api/users', async (req, res, next) => {
-  bcrypt.hash(req.body.password, 10, async (err, passwordHash) => {
-    if (err) {
-      return next(err);
-    }
-    try {
-      const user = new User({
-        username: req.body.username,
-        password: passwordHash,
-      });
-      await user.save();
-      return res.json({ 'user-id': user._id });
-    } catch (e) {
-      return next(e);
-    }
-  });
-});
-
-app.post('/api/session', (req, res, next) => {
-  passport.authenticate('local', (error, user, info) => {
-    if (error) {
-      return res.status(401).send(error);
-    }
-    if (!user) {
-      return res.status(401).send(info);
-    }
-
-    return req.logIn(user, (err) => {
-      if (err) {
-        return next(err);
-      }
-      return res.json({ 'user-id': user._id });
-    });
-  })(req, res, next);
-});
-
-app.delete('/api/session', (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    return res.json({ message: 'successfully logged out' });
-  });
-});
+app.use(`${API_PATH}/users`, usersRouter);
+app.use(`${API_PATH}/session`, sessionRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`),
