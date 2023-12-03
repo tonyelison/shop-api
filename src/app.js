@@ -5,7 +5,7 @@ import cors from 'cors';
 import logger from 'morgan';
 
 import passport from './config/passport.js';
-import authentication from './config/authentication.js';
+import route from './util/route-builder.js';
 import 'dotenv/config';
 
 import sessionRouter from './routes/session.js';
@@ -34,7 +34,7 @@ app.use(
 // Add user authentication
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(authentication.verify());
+// app.use(auth.verify());
 
 // Enable url encoding
 app.use(urlencoded({ extended: false }));
@@ -61,9 +61,22 @@ app.get(`${API_PATH}/hello`, (req, res) => {
   res.json({ message: 'Hello, World!' });
 });
 
-app.get(`${API_PATH}/hello-auth`, (req, res) => {
-  res.json({ message: 'Hello, Authenticated User!' });
-});
+app.use(
+  route.build('get', '/hello', (req, res) => {
+    res.json({ message: 'Hello, World!' });
+  }),
+);
+
+app.use(
+  route.build(
+    'get',
+    '/hello-auth',
+    (req, res) => {
+      res.json({ message: 'Hello, Authenticated User!' });
+    },
+    true,
+  ),
+);
 
 app.use(`${API_PATH}/users`, usersRouter);
 app.use(`${API_PATH}/session`, sessionRouter);
