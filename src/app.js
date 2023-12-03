@@ -57,10 +57,6 @@ REST endpoints
 
 const { API_PATH } = process.env;
 
-app.get(`${API_PATH}/hello`, (req, res) => {
-  res.json({ message: 'Hello, World!' });
-});
-
 app.use(
   route.build('get', '/hello', (req, res) => {
     res.json({ message: 'Hello, World!' });
