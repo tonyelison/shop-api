@@ -1,7 +1,6 @@
 import express from 'express';
 
 const router = express.Router();
-const noop = () => {};
 
 const routeBuilder = (() => {
   const checkAuth = (req, res, next) =>
@@ -10,7 +9,7 @@ const routeBuilder = (() => {
   const build = (method, resourcePath, callback, isProtected) =>
     router[method](
       `${process.env.API_PATH}${resourcePath}`,
-      isProtected ? checkAuth : noop,
+      isProtected ? checkAuth : (req, res, next) => next(),
       callback,
     );
 
