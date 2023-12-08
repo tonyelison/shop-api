@@ -40,7 +40,7 @@ app.use(passport.session());
 app.use(urlencoded({ extended: false }));
 
 // Enable CORS
-app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 
 // Enable JSON parsing
 app.use(express.json());

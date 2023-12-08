@@ -4,7 +4,8 @@ import passport from 'passport';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.json({ ...req.session.passport });
+  const creds = req.session.passport;
+  return creds ? res.json({ ...creds }) : res.sendStatus(404);
 });
 
 router.post('/', (req, res, next) => {
