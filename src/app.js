@@ -55,8 +55,6 @@ app.use((req, res, next) => {
 REST endpoints
 */
 
-const { API_PATH } = process.env;
-
 app.use(
   route('get', '/hello', (req, res) => {
     res.json({ message: 'Hello, World!' });
@@ -74,8 +72,8 @@ app.use(
   ),
 );
 
-app.use(`${API_PATH}/users`, usersRouter);
-app.use(`${API_PATH}/session`, sessionRouter);
+app.use(usersRouter);
+app.use(sessionRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`),
