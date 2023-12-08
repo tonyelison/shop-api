@@ -5,7 +5,7 @@ import cors from 'cors';
 import logger from 'morgan';
 
 import passport from './config/passport.js';
-import route from './util/route-builder.js';
+import route from './util/route.js';
 import 'dotenv/config';
 
 import sessionRouter from './routes/session.js';
@@ -58,13 +58,13 @@ REST endpoints
 const { API_PATH } = process.env;
 
 app.use(
-  route.build('get', '/hello', (req, res) => {
+  route('get', '/hello', (req, res) => {
     res.json({ message: 'Hello, World!' });
   }),
 );
 
 app.use(
-  route.build(
+  route(
     'get',
     '/hello-auth',
     (req, res) => {
