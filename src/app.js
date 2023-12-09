@@ -5,7 +5,7 @@ import cors from 'cors';
 import logger from 'morgan';
 
 import passport from './config/passport.js';
-import route from './util/route.js';
+import router from './util/router.js';
 import 'dotenv/config';
 
 import sessionRouter from './routes/session.js';
@@ -34,7 +34,6 @@ app.use(
 // Add user authentication
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(auth.verify());
 
 // Enable url encoding
 app.use(urlencoded({ extended: false }));
@@ -55,25 +54,27 @@ app.use((req, res, next) => {
 REST endpoints
 */
 
-app.use(
-  route('get', '/hello', (req, res) => {
-    res.json({ message: 'Hello, World!' });
-  }),
-);
+const Router = express.Router();
 
-app.use(
-  route(
-    'get',
-    '/hello-auth',
-    (req, res) => {
-      res.json({ message: 'Hello, Authenticated User!' });
-    },
-    true,
-  ),
-);
+// app.use(
+//   router('get', '/hello', (req, res) => {
+//     res.json({ message: 'Hello, World!' });
+//   })(Router),
+// );
 
-app.use(usersRouter);
-app.use(sessionRouter);
+// app.use(
+//   router(
+//     'get',
+//     '/hello-auth',
+//     (req, res) => {
+//       res.json({ message: 'Hello, Authenticated User!' });
+//     },
+//     true,
+//   ),
+// );
+
+// app.use(usersRouter);
+app.use(sessionRouter(Router));
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`),
