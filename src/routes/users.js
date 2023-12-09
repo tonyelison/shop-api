@@ -19,9 +19,8 @@ router.post(
   '/',
   asyncHandler(async (req, res, next) => {
     bcrypt.hash(req.body.password, 10, async (err, passwordHash) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
+
       const user = new User({
         username: req.body.username,
         password: passwordHash,

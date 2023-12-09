@@ -47,29 +47,10 @@ app.use((req, res, next) => {
   next();
 });
 
-/*
-REST endpoints
-*/
-
-// app.use(
-//   router('get', '/hello', (req, res) => {
-//     res.json({ message: 'Hello, World!' });
-//   })(Router),
-// );
-
-// app.use(
-//   router(
-//     'get',
-//     '/hello-auth',
-//     (req, res) => {
-//       res.json({ message: 'Hello, Authenticated User!' });
-//     },
-//     true,
-//   ),
-// );
-
+// Add REST endpoints
 app.use('/api', appRouter);
 
+// Listen at specified port
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`),
 );
