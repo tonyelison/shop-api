@@ -1,7 +1,7 @@
 import express from 'express';
 
 function Router() {
-  return express.Router.call(this);
+  return express.Router();
 }
 
 Object.getPrototypeOf(Router).add = function add(
