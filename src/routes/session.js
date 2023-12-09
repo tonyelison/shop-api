@@ -1,8 +1,6 @@
 import passport from 'passport';
 import Router from '../util/router.js';
 
-// const sessionRouter = (() => {
-
 const router = new Router();
 
 router.add('get', (req, res) => {
@@ -36,8 +34,5 @@ router.add('delete', (req, res, next) => {
     return res.json({ message: 'successfully logged out' });
   });
 });
-
-//   return router;
-// })();
 
 export default router;

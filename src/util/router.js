@@ -1,35 +1,19 @@
-// import ExpressRouter from './express-router.js';
-
-// function addRoute(method, callback, options = {}) {
-//   return this[method](
-//     '/',
-//     options.isProtected ? checkAuth : (req, res, next) => next(),
-//     callback,
-//   );
-// }
-
-// class Router extends ExpressRouter {
-//   constructor(...args) {
-//     super(...args);
-//     this.add = addRoute;
-//   }
-// }
-
 import express from 'express';
 
 function Router() {
   return express.Router.call(this);
 }
 
-const checkAuth = (req, res, next) =>
-  req.isAuthenticated() ? next() : res.sendStatus(403);
+Object.getPrototypeOf(Router).add = function add(
+  method,
+  callback,
+  options = {},
+) {
+  const authorize = options.isProtected
+    ? (req, res, next) => (req.isAuthenticated() ? next() : res.sendStatus(403))
+    : (req, res, next) => next();
 
-Router.__proto__.add = function add(method, callback, options = {}) {
-  return this[method](
-    '/',
-    options.isProtected ? checkAuth : (req, res, next) => next(),
-    callback,
-  );
+  return this[method]('/', authorize, callback);
 };
 
 export default Router;
