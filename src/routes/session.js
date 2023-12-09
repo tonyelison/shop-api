@@ -1,14 +1,14 @@
 import passport from 'passport';
-import Router from '../util/router.js';
+import Router, { Method } from '../util/router.js';
 
 const router = new Router();
 
-router.add('get', (req, res) => {
+router.add(Method.GET, (req, res) => {
   const creds = req.session.passport;
   return creds ? res.json({ ...creds }) : res.sendStatus(404);
 });
 
-router.add('post', (req, res, next) => {
+router.add(Method.POST, (req, res, next) => {
   passport.authenticate('local', (error, user, info) => {
     if (error) {
       return res.status(401).send(error);
@@ -26,7 +26,7 @@ router.add('post', (req, res, next) => {
   })(req, res, next);
 });
 
-router.add('delete', (req, res, next) => {
+router.add(Method.DELETE, (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);

@@ -1,8 +1,6 @@
 import express from 'express';
 
-function Router() {
-  return express.Router();
-}
+class Router extends express.Router {}
 
 Object.getPrototypeOf(Router).add = function add(
   method,
@@ -17,3 +15,11 @@ Object.getPrototypeOf(Router).add = function add(
 };
 
 export default Router;
+
+export const Method = {
+  GET: 'get',
+  POST: 'post',
+  PUT: 'put',
+  PATCH: 'patch',
+  DELETE: 'delete',
+};
