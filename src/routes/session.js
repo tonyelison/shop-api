@@ -1,15 +1,16 @@
+import express from 'express';
 import passport from 'passport';
-import router from '../util/router.js';
+import route from '../util/route.js';
 
-const PATH = '/session';
+const router = express.Router();
 
-const sessionRouter = (Router) => {
-  router('get', PATH, (req, res) => {
+const sessionRouter = (() => {
+  route('get', (req, res) => {
     const creds = req.session.passport;
     return creds ? res.json({ ...creds }) : res.sendStatus(404);
-  })(Router);
+  })(router);
 
-  router('post', PATH, (req, res, next) => {
+  route('post', (req, res, next) => {
     passport.authenticate('local', (error, user, info) => {
       if (error) {
         return res.status(401).send(error);
@@ -25,18 +26,18 @@ const sessionRouter = (Router) => {
         return res.redirect(303, req.originalUrl);
       });
     })(req, res, next);
-  })(Router);
+  })(router);
 
-  router('delete', PATH, (req, res, next) => {
+  route('delete', (req, res, next) => {
     req.logout((err) => {
       if (err) {
         return next(err);
       }
       return res.json({ message: 'successfully logged out' });
     });
-  })(Router);
+  })(router);
 
-  return Router;
-};
+  return router;
+})();
 
 export default sessionRouter;

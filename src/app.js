@@ -5,11 +5,11 @@ import cors from 'cors';
 import logger from 'morgan';
 
 import passport from './config/passport.js';
-import router from './util/router.js';
 import 'dotenv/config';
 
+import appRouter from './router.js';
 import sessionRouter from './routes/session.js';
-import usersRouter from './routes/users.js';
+// import usersRouter from './routes/users.js';
 
 // Connect to mongodb
 mongoose.connect(process.env.DB_URL);
@@ -73,8 +73,7 @@ const Router = express.Router();
 //   ),
 // );
 
-// app.use(usersRouter);
-app.use(sessionRouter(Router));
+app.use('/api', appRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`),

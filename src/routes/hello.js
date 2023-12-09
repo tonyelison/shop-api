@@ -1,4 +1,4 @@
-import router from '../util/router.js';
+import router from '../util/route.js';
 
 /*
 TEST ENDPOINTS
