@@ -7,11 +7,12 @@ Object.getPrototypeOf(Router).add = function add(
   callback,
   options = {},
 ) {
+  const path = options.path || '/';
   const authorize = options.isProtected
     ? (req, res, next) => (req.isAuthenticated() ? next() : res.sendStatus(403))
     : (req, res, next) => next();
 
-  return this[method]('/', authorize, callback);
+  return this[method](path, authorize, callback);
 };
 
 export default Router;

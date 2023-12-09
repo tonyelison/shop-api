@@ -1,8 +1,10 @@
 import express from 'express';
+import helloRouter from '../routes/hello.js';
 import sessionRouter from '../routes/session.js';
 
-const routing = express.Router();
+const router = express.Router();
 
-routing.use('/session', sessionRouter);
+router.use('/hello', helloRouter);
+router.use('/session', sessionRouter);
 
-export default routing;
+export default router;
