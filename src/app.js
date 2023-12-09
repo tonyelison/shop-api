@@ -4,10 +4,9 @@ import session from 'express-session';
 import cors from 'cors';
 import logger from 'morgan';
 
-import passport from './config/passport.js';
 import 'dotenv/config';
-
-import appRouter from './router.js';
+import passport from './config/passport-config.js';
+import appRouter from './config/router-config.js';
 
 // Connect to mongodb
 mongoose.connect(process.env.DB_URL);
