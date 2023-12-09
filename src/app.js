@@ -8,8 +8,6 @@ import passport from './config/passport.js';
 import 'dotenv/config';
 
 import appRouter from './router.js';
-import sessionRouter from './routes/session.js';
-// import usersRouter from './routes/users.js';
 
 // Connect to mongodb
 mongoose.connect(process.env.DB_URL);
@@ -53,8 +51,6 @@ app.use((req, res, next) => {
 /*
 REST endpoints
 */
-
-const Router = express.Router();
 
 // app.use(
 //   router('get', '/hello', (req, res) => {

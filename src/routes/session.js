@@ -1,43 +1,43 @@
-import express from 'express';
 import passport from 'passport';
-import route from '../util/route.js';
+import Router from '../util/router.js';
 
-const router = express.Router();
+// const sessionRouter = (() => {
 
-const sessionRouter = (() => {
-  route('get', (req, res) => {
-    const creds = req.session.passport;
-    return creds ? res.json({ ...creds }) : res.sendStatus(404);
-  })(router);
+const router = new Router();
 
-  route('post', (req, res, next) => {
-    passport.authenticate('local', (error, user, info) => {
-      if (error) {
-        return res.status(401).send(error);
-      }
-      if (!user) {
-        return res.status(401).send(info);
-      }
+router.add('get', (req, res) => {
+  const creds = req.session.passport;
+  return creds ? res.json({ ...creds }) : res.sendStatus(404);
+});
 
-      return req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        return res.redirect(303, req.originalUrl);
-      });
-    })(req, res, next);
-  })(router);
+router.add('post', (req, res, next) => {
+  passport.authenticate('local', (error, user, info) => {
+    if (error) {
+      return res.status(401).send(error);
+    }
+    if (!user) {
+      return res.status(401).send(info);
+    }
 
-  route('delete', (req, res, next) => {
-    req.logout((err) => {
+    return req.logIn(user, (err) => {
       if (err) {
         return next(err);
       }
-      return res.json({ message: 'successfully logged out' });
+      return res.redirect(303, req.originalUrl);
     });
-  })(router);
+  })(req, res, next);
+});
 
-  return router;
-})();
+router.add('delete', (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({ message: 'successfully logged out' });
+  });
+});
 
-export default sessionRouter;
+//   return router;
+// })();
+
+export default router;
