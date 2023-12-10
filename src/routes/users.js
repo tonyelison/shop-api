@@ -1,22 +1,24 @@
-import express from 'express';
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
+import Router, { Method } from '../util/router.js';
 import User from '../models/user.js';
-// import auth from '../util/route-builder-old.js';
 
-const router = express.Router();
+const router = new Router();
 
-router.get(
-  '/:id',
-  // auth.verify,
+router.add(
+  Method.GET,
   asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id).exec();
     return res.json({ 'user-id': user._id });
   }),
+  {
+    path: '/:id',
+    isProtected: true,
+  },
 );
 
-router.post(
-  '/',
+router.add(
+  Method.POST,
   asyncHandler(async (req, res, next) => {
     bcrypt.hash(req.body.password, 10, async (err, passwordHash) => {
       if (err) return next(err);
