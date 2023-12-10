@@ -1,4 +1,5 @@
-import Router, { Method } from '../util/router.js';
+import Router from '../util/router.js';
+import { Method } from '../util/http.js';
 import sessionController from '../controllers/session.js';
 
 const router = new Router();

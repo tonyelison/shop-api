@@ -11,11 +11,3 @@ class Router extends express.Router {
 }
 
 export default Router;
-
-export const Method = {
-  GET: 'get',
-  POST: 'post',
-  PUT: 'put',
-  PATCH: 'patch',
-  DELETE: 'delete',
-};
