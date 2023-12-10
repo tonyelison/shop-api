@@ -1,19 +1,16 @@
 import express from 'express';
 
-class Router extends express.Router {}
+class Router extends express.Router {
+  add = (method, callback, options = {}) => {
+    const path = options.path || '/';
+    const authorize = options.isProtected
+      ? (req, res, next) =>
+          req.isAuthenticated() ? next() : res.sendStatus(403)
+      : (req, res, next) => next();
 
-Object.getPrototypeOf(Router).add = function add(
-  method,
-  callback,
-  options = {},
-) {
-  const path = options.path || '/';
-  const authorize = options.isProtected
-    ? (req, res, next) => (req.isAuthenticated() ? next() : res.sendStatus(403))
-    : (req, res, next) => next();
-
-  return this[method](path, authorize, callback);
-};
+    return this[method](path, authorize, callback);
+  };
+}
 
 export default Router;
 
