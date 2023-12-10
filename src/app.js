@@ -4,8 +4,8 @@ import session from 'express-session';
 import cors from 'cors';
 import logger from 'morgan';
 
-import passport from './config/passport-config.js';
-import appRouter from './config/router-config.js';
+import passport from './config/passport.js';
+import router from './config/routing.js';
 import 'dotenv/config';
 
 const { env } = process;
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 });
 
 // Add app route paths
-app.use(env.API_PATH, appRouter);
+app.use(env.API_PATH, router);
 
 // Listen at specified port
 app.listen(env.PORT, () => console.log(`Server running on port ${env.PORT}`));
