@@ -1,6 +1,6 @@
 import passport from 'passport';
 
-const get = (req, res) => {
+const getCurrent = (req, res) => {
   const creds = req.session.passport;
   return creds ? res.json({ ...creds }) : res.sendStatus(404);
 };
@@ -27,7 +27,7 @@ const logout = (req, res, next) => {
 };
 
 export default {
-  get,
+  getCurrent,
   login,
   logout,
 };

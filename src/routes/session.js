@@ -3,7 +3,7 @@ import sessionController from '../controllers/session.js';
 
 const router = new Router();
 
-router.add(Method.GET, sessionController.get);
+router.add(Method.GET, sessionController.getCurrent);
 router.add(Method.POST, sessionController.login);
 router.add(Method.DELETE, sessionController.logout);
 
