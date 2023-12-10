@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Add REST endpoints
+// Add app route paths
 app.use(env.API_PATH, appRouter);
 
 // Listen at specified port
