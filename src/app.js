@@ -4,12 +4,14 @@ import session from 'express-session';
 import cors from 'cors';
 import logger from 'morgan';
 
-import 'dotenv/config';
 import passport from './config/passport-config.js';
 import appRouter from './config/router-config.js';
+import 'dotenv/config';
+
+const { env } = process;
 
 // Connect to mongodb
-mongoose.connect(process.env.DB_URL);
+mongoose.connect(env.DB_URL);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongo connection error'));
 
@@ -22,7 +24,7 @@ app.use(logger('dev'));
 // Enable express sessions
 app.use(
   session({
-    secret: process.env.SECRET_KEY,
+    secret: env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
   }),
@@ -36,7 +38,7 @@ app.use(passport.session());
 app.use(urlencoded({ extended: false }));
 
 // Enable CORS
-app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
+app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
 
 // Enable JSON parsing
 app.use(express.json());
@@ -48,9 +50,7 @@ app.use((req, res, next) => {
 });
 
 // Add REST endpoints
-app.use('/api', appRouter);
+app.use(env.API_PATH, appRouter);
 
 // Listen at specified port
-app.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT}`),
-);
+app.listen(env.PORT, () => console.log(`Server running on port ${env.PORT}`));
