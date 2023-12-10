@@ -11,6 +11,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'no-console': 'off',
     'import/extensions': ['error', 'ignorePackages'],
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
   },
