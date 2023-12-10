@@ -8,11 +8,7 @@ const router = new Router();
 TEST ENDPOINTS
 */
 
-router.add(Method.GET, helloController.test);
-
-router.add(Method.GET, helloController.authTest, {
-  path: '/auth',
-  isProtected: true,
-});
+router.add(Method.GET, helloController.test, { isPublic: true });
+router.add(Method.GET, helloController.authTest, { path: '/auth' });
 
 export default router;

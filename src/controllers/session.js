@@ -1,10 +1,7 @@
 import passport from 'passport';
 import { Status } from '../util/http.js';
 
-const getCurrent = (req, res) => {
-  const creds = req.session.passport;
-  return creds ? res.json({ ...creds }) : res.sendStatus(Status.NOT_FOUND);
-};
+const getCurrent = (req, res) => res.json({ ...req.session.passport });
 
 const login = (req, res, next) => {
   passport.authenticate('local', (error, user, info) => {

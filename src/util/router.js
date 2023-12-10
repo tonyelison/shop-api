@@ -1,13 +1,14 @@
 import express from 'express';
 
-const checkAuth = (authRequired) =>
-  authRequired
-    ? (req, res, next) => (req.isAuthenticated() ? next() : res.sendStatus(403))
-    : (req, res, next) => next();
+const checkAuth = (isPublicRoute) =>
+  isPublicRoute
+    ? (req, res, next) => next()
+    : (req, res, next) =>
+        req.isAuthenticated() ? next() : res.sendStatus(403);
 
 class Router extends express.Router {
-  add = (method, callback, { path, isProtected } = {}) =>
-    this[method](path || '/', checkAuth(isProtected), callback);
+  add = (method, callback, { path, isPublic } = {}) =>
+    this[method](path || '/', checkAuth(isPublic), callback);
 }
 
 export default Router;
