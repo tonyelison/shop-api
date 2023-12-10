@@ -23,7 +23,7 @@ const logout = (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
 
-    return res.json({ message: 'successfully logged out' });
+    return res.sendStatus(Status.NO_CONTENT);
   });
 };
 
