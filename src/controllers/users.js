@@ -5,7 +5,10 @@ import { Status } from '../util/http.js';
 
 const getById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).exec();
-  return res.json({ 'user-id': user._id });
+
+  return user
+    ? res.json({ 'user-id': user._id })
+    : res.sendStatus(Status.NOT_FOUND);
 });
 
 const register = asyncHandler(async (req, res, next) => {
