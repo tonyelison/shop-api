@@ -20,7 +20,7 @@ const create = asyncHandler(async (req, res) => {
     category_id: 456,
     description: 'Product Description goes here',
     keywords: ['product', 'test'],
-    image_url: './public/test.jpeg',
+    image_url: './test.jpeg',
   });
   await product.save();
   return res.redirect(Status.SEE_OTHER, `${req.originalUrl}/${product._id}`);
