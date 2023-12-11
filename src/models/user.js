@@ -10,3 +10,8 @@ const User = mongoose.model(
 );
 
 export default User;
+
+export const UserRole = {
+  ADMIN: 0,
+  CUSTOMER: 1,
+};

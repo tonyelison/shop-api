@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
-import User from '../models/user.js';
+import User, { UserRole } from '../models/user.js';
 import { Status } from '../util/http.js';
 
 const getById = asyncHandler(async (req, res) => {
@@ -15,6 +15,7 @@ const register = asyncHandler(async (req, res, next) => {
     const user = new User({
       username: req.body.username,
       password: passwordHash,
+      role: UserRole.CUSTOMER,
     });
     await user.save();
     return res.sendStatus(Status.CREATED);
