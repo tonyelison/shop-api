@@ -8,7 +8,7 @@ const Product = mongoose.model(
     category_id: { type: Number, required: true },
     description: { type: String },
     keywords: { type: Array },
-    image: { type: String },
+    image_url: { type: String },
   }),
 );
 
