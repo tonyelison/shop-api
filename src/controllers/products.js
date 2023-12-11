@@ -24,7 +24,7 @@ const create = asyncHandler(async (req, res) => {
     keywords: ['product', 'test'],
   });
   await product.save();
-  return res.sendStatus(Status.CREATED);
+  return res.redirect(Status.SEE_OTHER, `${req.originalUrl}/${product._id}`);
 });
 
 export default {

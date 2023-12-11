@@ -4,8 +4,11 @@ import productsController from '../controllers/products.js';
 
 const router = new Router();
 
-router.add(Method.GET, productsController.getAll);
-router.add(Method.GET, productsController.getById, { path: '/:id' });
-router.add(Method.POST, productsController.create);
+router.add(Method.GET, productsController.getAll, { isPublic: true });
+router.add(Method.GET, productsController.getById, {
+  path: '/:id',
+  isPublic: true,
+});
+router.add(Method.POST, productsController.create, { isPublic: true });
 
 export default router;
