@@ -11,18 +11,17 @@ const getById = asyncHandler(async (req, res) => {
     : res.sendStatus(Status.NOT_FOUND);
 });
 
-const register = asyncHandler(async (req, res, next) => {
-  bcrypt.hash(req.body.password, 10, async (err, passwordHash) => {
-    if (err) return next(err);
+const create = asyncHandler(async (req, res) => {
+  const hashedPass = await bcrypt.hash(req.body.password, 10);
 
-    const user = new User({
-      username: req.body.username,
-      password: passwordHash,
-      role: UserRole.CUSTOMER,
-    });
-    await user.save();
-    return res.sendStatus(Status.CREATED);
+  const user = new User({
+    username: req.body.username,
+    password: hashedPass,
+    role: UserRole.CUSTOMER,
   });
+
+  await user.save();
+  return res.sendStatus(Status.CREATED);
 });
 
-export default { getById, register };
+export default { getById, create };
