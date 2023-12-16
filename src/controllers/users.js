@@ -20,7 +20,15 @@ const create = asyncHandler(async (req, res) => {
     role: UserRole.CUSTOMER,
   });
 
-  await user.save();
+  try {
+    await user.save();
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(500).json({ message: 'Username already exists' });
+    }
+    throw error;
+  }
+
   return res.sendStatus(Status.CREATED);
 });
 
