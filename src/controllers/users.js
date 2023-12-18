@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import User, { UserRole } from '../models/user.js';
 import { Status } from '../util/http.js';
-import mailer from '../services/mailer.js';
+// import mailer from '../services/mailer.js';
 
 const getById = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).exec();
@@ -30,12 +30,13 @@ const create = asyncHandler(async (req, res) => {
     throw error;
   }
 
-  mailer.send({
-    to: 'tonyelison37@gmail.com',
-    from: '"Test User" <test@example.com>',
-    subject: 'User Created',
-    text: 'Hello world!',
-  });
+  // TODO: implement email verification
+  // mailer.send({
+  //   to: 'tonyelison37@gmail.com',
+  //   from: '"Test User" <test@example.com>',
+  //   subject: 'User Created',
+  //   text: 'Hello world!',
+  // });
 
   return res.sendStatus(Status.CREATED);
 });
