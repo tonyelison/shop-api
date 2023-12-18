@@ -13,16 +13,15 @@ const Router = () => {
   const addRoute = (method, callback, { path, isPublic } = {}) =>
     router[method](path || '/', checkAuth(isPublic), callback);
 
-  return [
-    router,
-    {
-      get: (...args) => addRoute(HttpMethod.GET, ...args),
-      post: (...args) => addRoute(HttpMethod.POST, ...args),
-      put: (...args) => addRoute(HttpMethod.PUT, ...args),
-      patch: (...args) => addRoute(HttpMethod.PATCH, ...args),
-      del: (...args) => addRoute(HttpMethod.DELETE, ...args),
-    },
-  ];
+  const method = {
+    get: (...args) => addRoute(HttpMethod.GET, ...args),
+    post: (...args) => addRoute(HttpMethod.POST, ...args),
+    put: (...args) => addRoute(HttpMethod.PUT, ...args),
+    patch: (...args) => addRoute(HttpMethod.PATCH, ...args),
+    del: (...args) => addRoute(HttpMethod.DELETE, ...args),
+  };
+
+  return [router, method];
 };
 
 export default Router;
