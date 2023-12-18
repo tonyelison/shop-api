@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/product.js';
-import { Status } from '../util/http.js';
+import { HttpStatus } from '../util/http.js';
 
 const getAll = asyncHandler(async (req, res) => {
   const products = await Product.find().exec();
@@ -10,7 +10,7 @@ const getAll = asyncHandler(async (req, res) => {
 const getById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id).exec();
 
-  return product ? res.json(product) : res.sendStatus(Status.NOT_FOUND);
+  return product ? res.json(product) : res.sendStatus(HttpStatus.NOT_FOUND);
 });
 
 const create = asyncHandler(async (req, res) => {
@@ -23,7 +23,10 @@ const create = asyncHandler(async (req, res) => {
     image_url: './test.jpeg',
   });
   await product.save();
-  return res.redirect(Status.SEE_OTHER, `${req.originalUrl}/${product._id}`);
+  return res.redirect(
+    HttpStatus.SEE_OTHER,
+    `${req.originalUrl}/${product._id}`,
+  );
 });
 
 export default {

@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 import User, { UserRole } from '../models/user.js';
-import { Status } from '../util/http.js';
+import { HttpStatus } from '../util/http.js';
 // import mailer from '../services/mailer.js';
 
 const getById = asyncHandler(async (req, res) => {
@@ -9,7 +9,7 @@ const getById = asyncHandler(async (req, res) => {
 
   return user
     ? res.json({ 'user-id': user._id })
-    : res.sendStatus(Status.NOT_FOUND);
+    : res.sendStatus(HttpStatus.NOT_FOUND);
 });
 
 const create = asyncHandler(async (req, res) => {
@@ -25,7 +25,9 @@ const create = asyncHandler(async (req, res) => {
     await user.save();
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(500).json({ message: 'Username already exists' });
+      return res
+        .status(HttpStatus.INTERNAL_SERVICE_ERROR)
+        .json({ message: 'Username already exists' });
     }
     throw error;
   }
@@ -38,7 +40,7 @@ const create = asyncHandler(async (req, res) => {
   //   text: 'Hello world!',
   // });
 
-  return res.sendStatus(Status.CREATED);
+  return res.sendStatus(HttpStatus.CREATED);
 });
 
 export default { getById, create };

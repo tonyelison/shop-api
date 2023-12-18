@@ -1,4 +1,4 @@
-export const Method = {
+export const HttpMethod = {
   GET: 'get',
   POST: 'post',
   PUT: 'put',
@@ -6,7 +6,7 @@ export const Method = {
   DELETE: 'delete',
 };
 
-export const Status = {
+export const HttpStatus = {
   OK: 200,
   CREATED: 201,
   NO_CONTENT: 204,
@@ -15,9 +15,10 @@ export const Status = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
+  INTERNAL_SERVICE_ERROR: 500,
 };
 
 export default {
-  Method,
-  Status,
+  HttpMethod,
+  HttpStatus,
 };

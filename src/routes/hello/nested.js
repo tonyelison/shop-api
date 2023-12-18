@@ -1,5 +1,5 @@
 import Router from '../../util/router.js';
-import { Method } from '../../util/http.js';
+import { HttpMethod } from '../../util/http.js';
 import helloController from '../../controllers/hello.js';
 
 const router = new Router();
@@ -8,13 +8,13 @@ const router = new Router();
 TEST NESTED ENDPOINTS
 */
 
-router.add(Method.GET, helloController.nestedTest, { isPublic: true });
-router.add(Method.GET, helloController.nestedTestDynamic, {
+router.add(HttpMethod.GET, helloController.nestedTest, { isPublic: true });
+router.add(HttpMethod.GET, helloController.nestedTestDynamic, {
   path: '/:id',
   isPublic: true,
 });
 
-router.add(Method.GET, helloController.authNestedTestDynamic, {
+router.add(HttpMethod.GET, helloController.authNestedTestDynamic, {
   path: '/:id/auth',
 });
 
