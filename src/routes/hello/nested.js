@@ -1,20 +1,19 @@
 import Router from '../../util/router.js';
-import { HttpMethod } from '../../util/http.js';
 import helloController from '../../controllers/hello.js';
 
-const router = new Router();
+const [router, method] = Router();
 
 /*
 TEST NESTED ENDPOINTS
 */
 
-router.add(HttpMethod.GET, helloController.nestedTest, { isPublic: true });
-router.add(HttpMethod.GET, helloController.nestedTestDynamic, {
+method.get(helloController.nestedTest, { isPublic: true });
+method.get(helloController.nestedTestDynamic, {
   path: '/:id',
   isPublic: true,
 });
 
-router.add(HttpMethod.GET, helloController.authNestedTestDynamic, {
+method.get(helloController.authNestedTestDynamic, {
   path: '/:id/auth',
 });
 

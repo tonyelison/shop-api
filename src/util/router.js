@@ -1,4 +1,5 @@
 import express from 'express';
+import { HttpMethod } from './http.js';
 
 const checkAuth = (isPublicRoute) =>
   isPublicRoute
@@ -6,9 +7,22 @@ const checkAuth = (isPublicRoute) =>
     : (req, res, next) =>
         req.isAuthenticated() ? next() : res.sendStatus(403);
 
-class Router extends express.Router {
-  add = (method, callback, { path, isPublic } = {}) =>
-    this[method](path || '/', checkAuth(isPublic), callback);
-}
+const Router = () => {
+  const router = express.Router();
+
+  const addRoute = (method, callback, { path, isPublic } = {}) =>
+    router[method](path || '/', checkAuth(isPublic), callback);
+
+  return [
+    router,
+    {
+      get: (...args) => addRoute(HttpMethod.GET, ...args),
+      post: (...args) => addRoute(HttpMethod.POST, ...args),
+      put: (...args) => addRoute(HttpMethod.PUT, ...args),
+      patch: (...args) => addRoute(HttpMethod.PATCH, ...args),
+      del: (...args) => addRoute(HttpMethod.DELETE, ...args),
+    },
+  ];
+};
 
 export default Router;

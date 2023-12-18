@@ -1,16 +1,15 @@
 import Router from '../util/router.js';
-import { HttpMethod } from '../util/http.js';
 import helloController from '../controllers/hello.js';
 import nestedHelloRouter from './hello/nested.js';
 
-const router = new Router();
+const [router, method] = Router();
 
 /*
 TEST ENDPOINTS
 */
 
-router.add(HttpMethod.GET, helloController.test, { isPublic: true });
-router.add(HttpMethod.GET, helloController.authTest, { path: '/auth' });
+method.get(helloController.test, { isPublic: true });
+method.get(helloController.authTest, { path: '/auth' });
 
 router.use('/nested', nestedHelloRouter);
 
