@@ -1,30 +1,34 @@
 import nodemailer from 'nodemailer';
+import mailgunTransport from 'nodemailer-mailgun-transport';
+import ejs from 'ejs';
 import 'dotenv/config';
 
-const { EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS } = process.env;
+const { EMAIL_API_KEY, EMAIL_DOMAIN, EMAIL_USER, CLIENT_ORIGIN } = process.env;
 
 const mailer = (() => {
-  const transporter = nodemailer.createTransport({
-    host: EMAIL_HOST,
-    port: EMAIL_PORT,
-    secure: false,
-    auth: {
-      user: EMAIL_USER,
-      pass: EMAIL_PASS,
-    },
-  });
+  const transporter = nodemailer.createTransport(
+    mailgunTransport({
+      auth: {
+        api_key: EMAIL_API_KEY,
+        domain: EMAIL_DOMAIN,
+      },
+    }),
+  );
 
-  const send = async ({ to, from, subject, text, html }) => {
+  const sendVerifyEmail = async (user, mailOptions) => {
+    const html = await ejs.renderFile('./src/templates/verify-email.html', {
+      user,
+      verifyUrl: `${CLIENT_ORIGIN}/verify`,
+    });
+
     await transporter.sendMail({
-      to,
-      from,
-      subject,
-      text,
       html,
+      from: `Shop API Support <${EMAIL_USER}@${EMAIL_DOMAIN}>`,
+      ...mailOptions,
     });
   };
 
-  return { send };
+  return { sendVerifyEmail };
 })();
 
 export default mailer;
