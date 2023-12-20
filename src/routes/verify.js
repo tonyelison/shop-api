@@ -1,10 +1,8 @@
 import Router from '../util/router.js';
+import verifyController from '../controllers/verify.js';
 
 const [router, method] = Router();
 
-// TODO: implement email token verification
-method.get((req, res) => res.json({ message: 'Email verified!' }), {
-  isPublic: true,
-});
+method.get(verifyController.verifyToken, { isPublic: true });
 
 export default router;

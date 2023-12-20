@@ -1,9 +1,11 @@
 import nodemailer from 'nodemailer';
 import mailgunTransport from 'nodemailer-mailgun-transport';
+import jwt from 'jsonwebtoken';
 import ejs from 'ejs';
 import 'dotenv/config';
 
-const { EMAIL_API_KEY, EMAIL_DOMAIN, EMAIL_USER, CLIENT_ORIGIN } = process.env;
+const { JWT_SECRET, EMAIL_API_KEY, EMAIL_DOMAIN, EMAIL_USER, CLIENT_ORIGIN } =
+  process.env;
 
 const mailer = (() => {
   const transporter = nodemailer.createTransport(
@@ -15,10 +17,14 @@ const mailer = (() => {
     }),
   );
 
+  const generateToken = (payload) => jwt.sign(payload, JWT_SECRET);
+
   const sendVerifyEmail = async (user, mailOptions) => {
     const html = await ejs.renderFile('./src/templates/verify-email.html', {
       user,
-      verifyUrl: `${CLIENT_ORIGIN}/verify`,
+      verifyUrl: `${CLIENT_ORIGIN}/verify?token=${generateToken({
+        user_id: user._id,
+      })}`,
     });
 
     await transporter.sendMail({
