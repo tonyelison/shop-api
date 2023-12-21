@@ -20,7 +20,7 @@ const verifyToken = asyncHandler(async (req, res) => {
     return res.sendStatus(HttpStatus.UNAUTHORIZED);
   }
 
-  return res.sendStatus(HttpStatus.OK);
+  return res.sendStatus(HttpStatus.NO_CONTENT);
 });
 
 export default { verifyToken };

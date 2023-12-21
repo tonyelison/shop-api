@@ -22,7 +22,7 @@ const mailer = (() => {
   const sendVerifyEmail = async (user, mailOptions) => {
     const html = await ejs.renderFile('./src/templates/verify-email.html', {
       user,
-      verifyUrl: `${CLIENT_ORIGIN}/verify?token=${generateToken({
+      verifyUrl: `${CLIENT_ORIGIN}/register/verify?token=${generateToken({
         user_id: user._id,
       })}`,
     });
