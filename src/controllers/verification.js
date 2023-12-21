@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import { HttpStatus } from '../util/http.js';
 import User from '../models/user.js';
+import mailer from '../services/mailer.js';
 import 'dotenv/config';
 
 const verifyToken = asyncHandler(async (req, res) => {
@@ -23,4 +24,14 @@ const verifyToken = asyncHandler(async (req, res) => {
   return res.sendStatus(HttpStatus.NO_CONTENT);
 });
 
-export default { verifyToken };
+const resendEmail = asyncHandler(async (req, res) => {
+  const userId = req.session.passport.user;
+  if (!userId) return res.sendStatus(HttpStatus.UNAUTHORIZED);
+
+  const user = await User.findById(userId).exec();
+  mailer.sendVerifyEmail(user);
+
+  return res.sendStatus(HttpStatus.NO_CONTENT);
+});
+
+export default { verifyToken, resendEmail };

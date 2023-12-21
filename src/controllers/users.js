@@ -35,10 +35,7 @@ const create = asyncHandler(async (req, res) => {
     throw error;
   }
 
-  mailer.sendVerifyEmail(user, {
-    to: `${user.full_name} <tonyelison37@gmail.com>`,
-    subject: 'Please Verify Your Email',
-  });
+  mailer.sendVerifyEmail(user);
 
   return res.sendStatus(HttpStatus.CREATED);
 });
