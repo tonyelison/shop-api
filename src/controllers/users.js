@@ -20,8 +20,8 @@ const create = asyncHandler(async (req, res) => {
     password: hashedPass,
     role: UserRole.CUSTOMER,
     active: false,
-    first_name: 'Test',
-    last_name: 'User',
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
   });
 
   try {
